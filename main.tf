@@ -11,10 +11,11 @@ terraform {
 
 provider "aws" {
   region = var.aws_region
+  profile = var.aws_profile
 }
 
 
-# Bedrock Agent Module Call
+# Bedrock Agent Module CallS
 module "bedrock_agent" {
   source = "./modules"
   

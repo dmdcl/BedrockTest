@@ -1,3 +1,10 @@
+locals {
+  agent_model_arns = [
+    "arn:aws:bedrock:us-east-1:058264080215:inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+    "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0"
+  ]
+}
+
 # Bedrock Agent IAM Role
 resource "aws_iam_role" "agent" {
   name = "${local.name_prefix}-agent-role"
@@ -33,9 +40,15 @@ resource "aws_iam_role_policy" "agent_model" {
     Statement = [{
       Effect = "Allow"
       Action = [
-        "bedrock:InvokeModel"
+        "bedrock:InvokeModel",
+        "bedrock:InvokeModelWithResponseStream",
+        "bedrock:GetInferenceProfile",
+        "bedrock:GetFoundationModel"
       ]
-      Resource = local.agent_model_arn
+      Resource = [
+        local.agent_model_arns
+          
+      ]
     }]
   })
 }
@@ -143,7 +156,7 @@ resource "aws_iam_role_policy" "kb_opensearch" {
 
 # Wait for IAM policies to propagate
 resource "time_sleep" "iam_propagation" {
-  create_duration = "20s"
+  create_duration = "60s"
   
   depends_on = [
     aws_iam_role_policy.kb_model,

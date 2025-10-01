@@ -39,7 +39,7 @@ resource "aws_opensearchserverless_access_policy" "main" {
     Rules = [
       {
         ResourceType = "index"
-        Resource     = ["index/${local.name_prefix}-${var.opensearch_collection_name}/*"]
+        Resource     = ["index/${local.name_prefix}-kb-col/*"]
         Permission = [
           "aoss:CreateIndex",
           "aoss:DeleteIndex",
@@ -51,7 +51,7 @@ resource "aws_opensearchserverless_access_policy" "main" {
       },
       {
         ResourceType = "collection"
-        Resource     = ["collection/${local.name_prefix}-${var.opensearch_collection_name}"]
+        Resource     = ["collection/${local.name_prefix}-kb-col"]
         Permission = [
           "aoss:CreateCollectionItems",
           "aoss:DescribeCollectionItems",
@@ -124,5 +124,13 @@ resource "opensearch_index" "main" {
   
   force_destroy = true
   
-  depends_on = [aws_opensearchserverless_collection.main]
+  depends_on = [
+    aws_opensearchserverless_access_policy.main,
+    aws_opensearchserverless_collection.main,
+    time_sleep.opensearch_policy_propagation
+  ]
+}
+
+resource "time_sleep" "opensearch_policy_propagation" {
+  create_duration = "60s"
 }

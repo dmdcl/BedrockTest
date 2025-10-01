@@ -15,7 +15,10 @@ resource "aws_bedrockagent_agent" "main" {
   
   depends_on = [
     aws_iam_role_policy.agent_model,
-    aws_bedrockagent_knowledge_base.main
+    aws_iam_role_policy.agent_kb,
+    aws_bedrockagent_knowledge_base.main,
+    aws_s3_bucket.kb,
+    time_sleep.iam_propagation
   ]
 }
 
@@ -29,6 +32,7 @@ resource "aws_bedrockagent_agent_knowledge_base_association" "main" {
   description          = "Knowledge base for ${var.agent_name}"
   
   depends_on = [
+    aws_bedrockagent_agent.main,
     aws_iam_role_policy.agent_kb
   ]
 }
@@ -42,4 +46,9 @@ resource "aws_bedrockagent_agent_alias" "main" {
   description      = "Production alias for ${var.agent_name}"
   
   tags = local.common_tags
+
+  depends_on = [ 
+    aws_bedrockagent_agent.main,
+    aws_bedrockagent_agent_knowledge_base_association.main
+   ]
 }
