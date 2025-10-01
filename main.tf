@@ -1,45 +1,47 @@
-provider "aws" {
-  region = "us-east-1" # Update this to your desired AWS region
-}
-
-module "knowledge_base" {
-  source = "./modules"
-  # Define required variables for the module
-  kb_s3_bucket_name_prefix = "your-s3-bucket-name" # Replace this with name of existing S3 bucket to use as knowledge base data source
+terraform {
+  required_version = ">= 1.5.0"
   
-  # (Optional) Additional settings for variables defined in modules/variables.tf can be added here
-  chunking_strategy        = "DEFAULT"      # Supports FIXED_SIZE, HIERARCHICAL, SEMANTIC, or NONE. By default, with DEFAULT chunking, it automatically splits the text into chunks of approximately 300 tokens.
-  kb_model_id              = null           # Leave as null to use the default "amazon.titan-embed-text-v2:0", or replace with your desired model ID
-  kb_name                  = null           # Leave as null to use the default KB value "resourceKB", or replace with a custom name
-  kb_oss_collection_name   = null           # Leave as null to use the default OpenSearch value "bedrock-resource-kb", or replace with a custom name 
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.48"
+    }
+  }
 }
 
-output "account_id" {
-  value = module.knowledge_base.account_id
+provider "aws" {
+  region = var.aws_region
 }
 
-output "partition" {
-  value = module.knowledge_base.partition
-}
 
-output "region" {
-  value = module.knowledge_base.region
-}
-
-output "bedrockarn" {
-  value = module.knowledge_base.bedrockarn
-}
-
-output "s3_bucket_name" {
-  value = module.knowledge_base.s3_bucket_name
-}
-
-output "knowledge_base_id" {
-  value       = module.knowledge_base.knowledge_base_id
-  description = "The ID of the Knowledge Base"
-}
-
-output "knowledge_base_ARN" {
-  value       = module.knowledge_base.knowledge_base_ARN
-  description = "The ARN of the Knowledge Base"
+# Bedrock Agent Module Call
+module "bedrock_agent" {
+  source = "./modules"
+  
+  # General
+  project_name = var.project_name
+  environment  = var.environment
+  
+  # Agent
+  agent_name        = var.agent_name
+  agent_model_id    = var.agent_model_id
+  agent_instruction = var.agent_instruction
+  agent_description = var.agent_description
+  
+  # Knowledge Base
+  kb_name               = var.kb_name
+  kb_description        = var.kb_description
+  kb_embedding_model_id = var.kb_embedding_model_id
+  
+  # OpenSearch
+  opensearch_collection_name = var.opensearch_collection_name
+  opensearch_index_name      = var.opensearch_index_name
+  
+  # Chunking
+  chunking_strategy             = var.chunking_strategy
+  fixed_size_max_tokens         = var.fixed_size_max_tokens
+  fixed_size_overlap_percentage = var.fixed_size_overlap_percentage
+  
+  # Tags
+  tags = var.tags
 }
