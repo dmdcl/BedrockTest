@@ -28,15 +28,15 @@ locals {
   partition  = data.aws_partition.current.partition
   region     = data.aws_region.current.name
   
-  # Naming conventions
+# Naming conventions
   name_prefix = "${var.project_name}-${var.environment}"
   
- # Model ARNs (inference profile + foundation model)
+# Model ARNs (inference profile + foundation model)
   agent_inference_profile_id  = "us.${var.agent_model_id}"
   agent_inference_profile_arn = "arn:${local.partition}:bedrock:${local.region}:${local.account_id}:inference-profile/${local.agent_inference_profile_id}"
   agent_foundation_model_arn  = "arn:${local.partition}:bedrock:*::foundation-model/${var.agent_model_id}"
 
-    # KB model ARN
+# KB model ARN
   kb_model_arn = "arn:${local.partition}:bedrock:${local.region}::foundation-model/${var.kb_embedding_model_id}"
   
   

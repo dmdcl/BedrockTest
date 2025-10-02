@@ -1,6 +1,5 @@
-# ==========================================
+
 # Bedrock Agent
-# ==========================================
 resource "aws_bedrockagent_agent" "main" {
   agent_name              = "${local.name_prefix}-${var.agent_name}"
   agent_resource_role_arn = aws_iam_role.agent.arn
@@ -22,9 +21,7 @@ resource "aws_bedrockagent_agent" "main" {
   ]
 }
 
-# ==========================================
 # Agent Knowledge Base Association
-# ==========================================
 resource "aws_bedrockagent_agent_knowledge_base_association" "main" {
   agent_id             = aws_bedrockagent_agent.main.id
   knowledge_base_id    = aws_bedrockagent_knowledge_base.main.id
@@ -37,9 +34,8 @@ resource "aws_bedrockagent_agent_knowledge_base_association" "main" {
   ]
 }
 
-# ==========================================
+
 # Agent Alias (Required for Invocation)
-# ==========================================
 resource "aws_bedrockagent_agent_alias" "main" {
   agent_id         = aws_bedrockagent_agent.main.id
   agent_alias_name = "production"
