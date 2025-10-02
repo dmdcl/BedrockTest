@@ -1,10 +1,3 @@
-locals {
-  agent_model_arns = [
-    "arn:aws:bedrock:us-east-1:058264080215:inference-profile/us.anthropic.claude-3-7-sonnet-20250219-v1:0",
-    "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-7-sonnet-20250219-v1:0"
-  ]
-}
-
 # Bedrock Agent IAM Role
 resource "aws_iam_role" "agent" {
   name = "${local.name_prefix}-agent-role"
@@ -46,7 +39,8 @@ resource "aws_iam_role_policy" "agent_model" {
         "bedrock:GetFoundationModel"
       ]
       Resource = [
-        local.agent_model_arns
+        local.agent_inference_profile_arn,
+        local.agent_foundation_model_arn
           
       ]
     }]

@@ -4,7 +4,7 @@
 resource "aws_bedrockagent_agent" "main" {
   agent_name              = "${local.name_prefix}-${var.agent_name}"
   agent_resource_role_arn = aws_iam_role.agent.arn
-  foundation_model        = var.agent_model_id
+  foundation_model        = local.agent_inference_profile_id
   
   description = var.agent_description
   instruction = var.agent_instruction
