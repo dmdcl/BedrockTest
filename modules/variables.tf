@@ -18,6 +18,12 @@ variable "agent_name" {
   default     = "my-bedrock-agent"
 }
 
+variable "agent_alias_name" {
+  description = "Name of the Bedrock Agent"
+  type = string
+  default = "production"
+}
+
 variable "agent_model_id" {
   description = "Model ID for the Bedrock Agent"
   type        = string

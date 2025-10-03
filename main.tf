@@ -26,6 +26,7 @@ module "bedrock_agent" {
   # Agent
   agent_name        = var.agent_name
   agent_model_id    = var.agent_model_id
+  agent_alias_name = var.agent_alias_name
   agent_instruction = var.agent_instruction
   agent_description = var.agent_description
   
