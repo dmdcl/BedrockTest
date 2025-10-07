@@ -14,6 +14,11 @@ output "agent_name" {
   value       = aws_bedrockagent_agent.main.agent_name
 }
 
+output "agent_alias_id" {
+  description = "ID of the Bedrock Agent Alias"
+  value = aws_bedrockagent_agent_alias.main.agent_alias_id
+}
+
 # Knowledge Base Outputs
 output "knowledge_base_id" {
   description = "ID of the Knowledge Base"

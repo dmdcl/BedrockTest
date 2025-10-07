@@ -38,7 +38,7 @@ resource "aws_bedrockagent_agent_knowledge_base_association" "main" {
 # Agent Alias (Required for Invocation)
 resource "aws_bedrockagent_agent_alias" "main" {
   agent_id         = aws_bedrockagent_agent.main.id
-  agent_alias_name = "production"
+  agent_alias_name = var.agent_alias_name
   description      = "Production alias for ${var.agent_name}"
   
   tags = local.common_tags

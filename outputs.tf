@@ -14,6 +14,11 @@ output "agent_name" {
   value       = module.bedrock_agent.agent_name
 }
 
+output "agent_alias_id" {
+  description = "ID of the Bedrock Agent Alias"
+  value = module.bedrock_agent.agent_alias_id
+}
+
 output "knowledge_base_id" {
   description = "ID of the Knowledge Base"
   value       = module.bedrock_agent.knowledge_base_id
